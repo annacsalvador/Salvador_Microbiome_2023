@@ -23,7 +23,7 @@ library(kableExtra)
 library(GGally)
 
 #### Pathway analysis!
-setwd("/Volumes/Transcend1/Active_Projects/qtl_paper2_R/")
+setwd("/Volumes/Transcend\ 1/Active_Projects/qtl_paper2_R/")
 
 # Requires genotypes and phenotypes to be in the same file
 phenotypes <- read.csv("data/raw/pathway_phe22_final_FINAL.csv", row.names = 1)
@@ -83,37 +83,33 @@ hist(phenotypes$wunifrac_Axis.1)
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 # Test the causal models Chr 1
 
-sem1e <- 'bray_Axis.2 ~ diet + bcpc2q_jpc2q
-          X18f60eae2c3a26bab8efa0f9823e31b4 ~ diet + bcpc2q_jpc2q
-          b89e2f23a606787577644904f2b6aed3 ~ sex + diet + sex*diet + bcpc2q_jpc2q
-          ecfbbfd673f8a3e1c34718d968e6b069 ~ sex + diet + bcpc2q_jpc2q
+sem1d <- 'bray_Axis.2 ~ diet + bcpc2q_jpc2q + ecfbbfd673f8a3e1c34718d968e6b069 + b89e2f23a606787577644904f2b6aed3 + X18f60eae2c3a26bab8efa0f9823e31b4
+          X18f60eae2c3a26bab8efa0f9823e31b4 ~ bcpc2q_jpc2q
+          b89e2f23a606787577644904f2b6aed3 ~ bcpc2q_jpc2q
           X18f60eae2c3a26bab8efa0f9823e31b4 ~~ b89e2f23a606787577644904f2b6aed3
           hdl_avg ~ sex + diet + bcpc2q_jpc2q
           fat_gain ~ sex + bcpc2q_jpc2q
 ' 
 
-fit_data1e <- cfa(sem1e, data = phenotypes, 
+fit_data1d <- cfa(sem1d, data = phenotypes, 
                   estimator = "DWLS")
-summary(fit_data1e, fit.measures = TRUE, standardized=T,rsquare=T)
-semPaths(fit_data1e,"std",layout = 'tree', edge.label.cex=.9, curvePivot = TRUE)
+summary(fit_data1d, fit.measures = TRUE, standardized=T,rsquare=T)
+semPaths(fit_data1d,"std",layout = 'tree', edge.label.cex=.9, curvePivot = TRUE)
 
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
-# Refine sem1e
+# Refine sem1d
 
-sem1e.R <- 'bray_Axis.2 ~ diet + bcpc2q_jpc2q
-          X18f60eae2c3a26bab8efa0f9823e31b4 ~ diet + bcpc2q_jpc2q
-          b89e2f23a606787577644904f2b6aed3 ~ diet
-          ecfbbfd673f8a3e1c34718d968e6b069 ~ bcpc2q_jpc2q
-          X18f60eae2c3a26bab8efa0f9823e31b4 ~~ b89e2f23a606787577644904f2b6aed3
-          hdl_avg ~ sex + bcpc2q_jpc2q
-          fat_gain ~ sex + bcpc2q_jpc2q
+sem1d.R <- 'bray_Axis.2 ~ diet + ecfbbfd673f8a3e1c34718d968e6b069 + b89e2f23a606787577644904f2b6aed3 + X18f60eae2c3a26bab8efa0f9823e31b4
+            X18f60eae2c3a26bab8efa0f9823e31b4 ~ bcpc2q_jpc2q
+            b89e2f23a606787577644904f2b6aed3 ~ bcpc2q_jpc2q
+            X18f60eae2c3a26bab8efa0f9823e31b4 ~~ b89e2f23a606787577644904f2b6aed3
+            hdl_avg ~ sex + diet + bcpc2q_jpc2q
+            fat_gain ~ sex + bcpc2q_jpc2q
 ' 
-
-fit_data1e.R <- cfa(sem1e.R, data = phenotypes, 
-                  estimator = "DWLS")
-summary(fit_data1e.R, fit.measures = TRUE, standardized=T,rsquare=T)
-semPaths(fit_data1e.R,"std",layout = 'tree', edge.label.cex=.9, curvePivot = TRUE)
-      # Note that the most assertive arguments we would make about sem1d are detected here as covariate paths.
+fit_data1d.R <- cfa(sem1d.R, data = phenotypes, 
+                    estimator = "DWLS")
+summary(fit_data1d.R, fit.measures = TRUE, standardized=T,rsquare=T)
+semPaths(fit_data1d.R,"std",layout = 'tree', edge.label.cex=.9, curvePivot = TRUE)
 ####################################################################################################
 
 #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
